@@ -1,0 +1,20 @@
+{
+  "name": "mrsudo-server",
+  "description": "...",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./src/server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "browserify": "^14.1.0",
+    "faucet": "0.0.1",
+    "tape": "^4.6.3",
+    "uglifyjs": "^2.4.10"
+  }
+}
