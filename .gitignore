@@ -1,4 +1,2 @@
 .tern-port
-views/**/*.html
 node_modules/
-typings/
