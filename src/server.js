@@ -1,29 +1,21 @@
-const env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+const app  = require("express")();
+const http = require('http').Server(app);
+const io   = require('socket-io')(http);
 
-const express = require("express");
-const bodyParser = require("body-parser");
+app.get('/', (req, res) => {
+    res.send('Nothing here!');
+});
 
-// import cli from './controllers/cli';
+io.on('connection', (socket) => {
+    console.log('Connected');
 
-// FIXME Probably not a good idea
-const config = require('./config/config.' + process.env.NODE_ENV);
+    // TODO
 
-//
-const app = express();
+    socket.on('disconnect', () => {
+        console.log('Disconnected');
+    });
+});
 
-// Configuration
-app.configure(() => {
-    app.use(express.static(config.rootPath + "/public"));
-    // app.use(express.logger('dev'));
-
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(bodyParser.json());
-})
-
-// Routes
-// app.get('/', cli.execute);
-
-// Bootstrap
-app.listen(config.port, () => {
-    console.log("Listening on port " + config.port + '...');
+app.listen(3000, () => {
+    console.log('Listening on port 3000');
 });
