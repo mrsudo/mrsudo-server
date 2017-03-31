@@ -8,13 +8,11 @@
     "start": "node ./src/server.js"
   },
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "socket-io": "^1.0.0"
   },
   "devDependencies": {
-    "browserify": "^14.1.0",
     "faucet": "0.0.1",
-    "tape": "^4.6.3",
-    "uglifyjs": "^2.4.10"
+    "tape": "^4.6.3"
   }
 }
