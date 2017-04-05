@@ -3,9 +3,10 @@
   "description": "...",
   "version": "1.0.0",
   "main": "src/server.js",
-  "license": "MIT",
+  "license": "Apache",
   "scripts": {
-    "start": "node ./src/server.js"
+    "start": "node ./src/server.js",
+    "test": "faucet"
   },
   "dependencies": {
     "express": "^4.15.2",
