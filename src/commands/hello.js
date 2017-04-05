@@ -1,8 +1,8 @@
-module.exports = (args, socket) => {
+module.exports = (api, ...args) => {
     let name = "world";
     if (args.length > 1) {
-        name = args[1];
+        name = args.slice(1).join(" ");
     }
-    socket.emit('stdout', `Hello, ${name}!`);
+    api.stdout(`Hello, ${name}!`);
     return 0;
 };
