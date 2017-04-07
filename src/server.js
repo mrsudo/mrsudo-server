@@ -1,6 +1,6 @@
-// const app      = require("express")();
-// const http     = require('http').Server(app);
-const io       = require('socket.io')(3000);
+const app    = require("express")();
+const server = require('http').createServer(app);
+const io     = require('socket.io')(server);
 
 const commands   = require('./commands');
 const apiFactory = require('./lib/api');
@@ -36,10 +36,8 @@ io.on('connection', (socket) => {
 });
 
 // TODO
-// app.get('/', (req, res) => {
-//     res.send('Nothing here!');
-// });
+app.get('/', (req, res) => {
+    res.send('Nothing here!');
+});
 
-// app.listen(3000, () => {
-//     console.log('Listening on port 3000');
-// });
+server.listen(3000);
