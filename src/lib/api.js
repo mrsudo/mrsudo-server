@@ -1,8 +1,9 @@
 module.exports = (socket) => ({
-    stdout(msg) {
+    ok(msg) {
         socket.emit('stdout', msg);
     },
-    stderr(msg) {
+
+    err(msg) {
         socket.emit('stderr', msg);
     }
 });

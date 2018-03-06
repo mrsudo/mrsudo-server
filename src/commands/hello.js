@@ -1,8 +1,8 @@
-module.exports = (api, ...args) => {
+module.exports = (api, _context, ...args) => {
     let name = "world";
     if (args.length > 1) {
         name = args.slice(1).join(" ");
     }
-    api.stdout(`Hello, ${name}!`);
+    api.ok(`Hello, ${name}!`);
     return 0;
 };
