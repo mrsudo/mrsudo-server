@@ -31,16 +31,23 @@ function init_prompt() {
 function begin() {
     init_prompt();
 
-    sock.on('stdout', message => {
-        console.log('\x1b[32m%s\x1b[0m', message);
+    //
+    sock.on('data', data => {
+        console.log('Got %s', JSON.stringify(data));
         init_prompt();
     });
 
-    sock.on('stderr', message => {
-        console.log('\x1b[31m%s\x1b[0m', message);
+    sock.on('ok', msg => {
+        console.log('\x1b[32m%s\x1b[0m', msg);
         init_prompt();
     });
 
+    sock.on('error', msg => {
+        console.log('\x1b[31m%s\x1b[0m', msg);
+        init_prompt();
+    });
+
+    //
     stdin.on("data", result => {
         let str = result.toString().trim();
         if (str === "exit") {

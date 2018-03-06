@@ -4,18 +4,19 @@ process.env.NODE_PATH = __dirname;
 require('module').Module._initPaths();
 
 //
-const io = require('socket.io')(3000);
+require('lib/util');
+const apiFactory = require('lib/api');
+const commands = require('commands');
 
-const commands    = require('commands');
-const apiFactory  = require('lib/api');
-const version = require('version');
+const io = require('socket.io')(3000);
 
 //
 let connected_users = [];
 
+
+// TODO Replace with real authentication
 io.use((socket, next) => {
     console.log(`Query: ${socket.handshake.query.ssid}`);
-    // TODO Replace with real authentication
     if (socket.handshake.query.ssid === "0") {
         return next();
     }
@@ -24,32 +25,27 @@ io.use((socket, next) => {
 
 //
 io.on('connect', (socket) => {
-    let ssid = parseInt(socket.handshake.query.ssid);
-    let api = apiFactory(socket);
+    const api = apiFactory(socket);
 
-    console.log(`New connection from ${socket.handshake.address} (${ssid})`);
+    let ssid = socket.handshake.query.ssid;
+    connected_users.push(ssid);
+
+    console.log("New connection from %s (%d active)",
+                socket.handshake.address,
+                connected_users.length);
 
     // TODO construct session context (user info) from ssid
+    // TODO store user session data in redis
     let context = {};
-    // if ssid is valid {
-    //     fill context with session data
-    //     2. send sessionid back to user to be stored in a cookie
-    // }
-
-    // TODO Integration into context
-    connected_users.push(ssid);
-    console.log(`Users logged in: ${connected_users}`);
 
     socket.on('disconnect', () => {
-        console.log(`Disconnected ${socket.handshake.address}`);
-        //
-        let i = connected_users.indexOf(ssid);
-        if (i > -1) connected_users.splice(i, 1);
-        console.log(`Users left: ${connected_users}`);
+        console.log("Disconnected %s (%s left)",
+                    socket.handshake.address,
+                    connected_users.remove(ssid).length);
     });
 
+    // TODO Error-check data
     socket.on('execute', data => {
-        // TODO Error-check data
         console.log(`Executing: ${data.command}`);
         let args = data.command.split(" ");
         if (args[0] in commands) {
@@ -68,4 +64,4 @@ io.on('connect', (socket) => {
     });
 });
 
-console.log(`Mr. Sudo v${version} started`);
+console.log(`Mr. Sudo v${require('version')} started`);
