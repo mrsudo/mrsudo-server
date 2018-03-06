@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+const io = require("socket.io-client");
+const sock = io("http://localhost:3000", { query: "ssid=0" }); // TODO use https
+const stdin = process.stdin;
+
+const prompt = "> ";
+
+sock.on('connect', () => {
+    console.log("Connected to server!");
+    begin();
+});
+
+sock.on('connect_error', data => {
+    console.log("\x1b[31m%s\x1b[0m", `Failed to connect to server.\n${data}`);
+    process.exit(1);
+});
+
+sock.on('error', data => {
+    console.log(`Unexpected error: ${data}`);
+    process.exit(2);
+})
+
+//
+
+function init_prompt() {
+    stdin.resume();
+    process.stdout.write(prompt);
+}
+
+function begin() {
+    init_prompt();
+
+    sock.on('stdout', message => {
+        console.log('\x1b[32m%s\x1b[0m', message);
+        init_prompt();
+    });
+
+    sock.on('stderr', message => {
+        console.log('\x1b[31m%s\x1b[0m', message);
+        init_prompt();
+    });
+
+    stdin.on("data", result => {
+        let str = result.toString().trim();
+        if (str === "exit") {
+            console.log("Goodbye!");
+            sock.disconnect();
+            process.exit();
+        } else {
+            sock.emit('execute', { command: str });
+        }
+        stdin.pause();
+    });
+}

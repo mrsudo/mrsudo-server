@@ -5,6 +5,7 @@
   "main": "src/server.js",
   "license": "Apache",
   "scripts": {
+    "repl": "bin/mrsudo",
     "start": "babel-node ./src/server.js",
     "test": "faucet"
   },
