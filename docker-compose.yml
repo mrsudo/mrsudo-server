@@ -1,16 +1,24 @@
-nginx:
-  image: vnought/nginx-dev
-  ports:
-    - "8080:80"
-    - "3000:3000"
-  volumes:
-    - ./src/config/nginx.conf:/etc/nginx/conf.d/vhost.conf
+version: "3"
 
-mongodb:
-  image: tutum/mongodb
-  ports:
-    - "27017:27017"
-    - "28017:28017"
-  environment:
-    - MONGODB_USER=test
-    - MONGODB_PASS=test
+services:
+  app:
+    image: node:alpine
+    user: node
+    working_dir: /home/node/app
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/home/node/app
+    command: "npm start"
+
+# mongodb:
+#   image: tutum/mongodb
+#   environment:
+#     - MONGODB_USER=mrsudo
+#     - MONGODB_PASS=mrsudo
+
+# redis:
+#   image: redis:alpine
+#   ports:
+#     - 6379:6379
+
